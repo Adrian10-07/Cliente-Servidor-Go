@@ -15,8 +15,8 @@ func NewMySQLRepository() *MySQLRepository {
 }
 
 func (r *MySQLRepository) Save(p *domain.Product) error {
-	query := "INSERT INTO Product (Nombre, Precio, Cantidad, CodigoDeBarras) VALUES (?, ?, ?, ?)"
-	_, err := r.conn.DB.Exec(query, p.Nombre, p.Precio, p.Cantidad, p.CodigoDeBarras)
+	query := "INSERT INTO Product (Precio, Nombre, Catidad, CodigoDeBarras) VALUES (?, ?, ?, ?)"
+	_, err := r.conn.DB.Exec(query, p.Precio, p.Nombre, p.Cantidad, p.CodigoDeBarras)
 	return err
 }
 
@@ -28,8 +28,8 @@ func (r *MySQLRepository) Delete(p string)error{
 }
 
 func (r *MySQLRepository) Update(id int,p *domain.Product)error{
-	query := "UPDATE Product SET Nombre = ?, Precio = ?, Cantidad = ?, CodigoDeBarras = ?, WHERE id = ?"
-    _, err := r.conn.DB.Exec(query, p.Nombre, p.Precio,p.Cantidad,p.CodigoDeBarras,id)
+	query := "UPDATE Product SET Precio = ?, Nombre  = ?, Catidad = ?, CodigoDeBarras = ? WHERE id = ?"
+    _, err := r.conn.DB.Exec(query, p.Precio,p.Nombre ,p.Cantidad,p.CodigoDeBarras,id)
     if err != nil {
         return err
     }
@@ -37,7 +37,7 @@ func (r *MySQLRepository) Update(id int,p *domain.Product)error{
 }
 
 func (r *MySQLRepository) GetAll() ([]domain.Product, error) {
-	query := "SELECT Nombre, Precio, Cantidad, CodigoDeBarras FROM Product"
+	query := "SELECT Precio, Nombre, Catidad, CodigoDeBarras FROM Product"
 	rows, err := r.conn.DB.Query(query)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (r *MySQLRepository) GetAll() ([]domain.Product, error) {
 	var products []domain.Product
 	for rows.Next() {
 		var product domain.Product
-		if err := rows.Scan(&product.Nombre, &product.Precio, product.Cantidad, product.CodigoDeBarras); err != nil {
+		if err := rows.Scan( &product.Precio,&product.Nombre, &product.Cantidad, &product.CodigoDeBarras); err != nil {
 			return nil, err
 		}
 		products = append(products, product)
